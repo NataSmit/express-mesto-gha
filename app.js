@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const router = require('./routes/users');
+const routerCards = require('./routes/cards');
 
 const { PORT = 3000 } = process.env;
 
@@ -14,9 +15,19 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 
 });
 
-
-
 app.use('/', router);
+app.use('/', routerCards);
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: '62a7728ba6402e279fe91c81' // вставьте сюда _id созданного в предыдущем пункте пользователя
+  };
+
+  next();
+});
+
+// eslint-disable-next-line no-console
+
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
