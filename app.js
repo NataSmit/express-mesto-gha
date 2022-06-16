@@ -27,28 +27,15 @@ app.use('/', router);
 
 app.use('/', routerCards);
 
-// app.use((err, req, res, next) => {
-//  console.error(err.stack);
-//  res.status(500).send('Something broke!');
-// });
-
 app.use((err, req, res, next) => {
-
-  if (err.statusCode) {
+  if (err.name === 'NotFoundError' || err.name === 'BadRequestError') {
     res.status(err.statusCode).send({ err, message: err.message });
   } else {
-    res.status(err.statusCode = 500).send({ err, code: err.statusCode, message: 'Внутренняя ошибка сервера' })
+    // eslint-disable-next-line no-param-reassign
+    res.status(err.statusCode = 500).send({ err, message: 'Внутренняя ошибка сервера' });
   }
-
   next();
 });
-
-//app.use((err, req, res, next) => {
-//  const errorCode = err.statusCode || 500;
-//  res.status(errorCode).send({ message: errorCode === 500 ? 'Произошла внутренняя ошибка сервера' : err.message, err });
-//
-//  next();
-//});
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает

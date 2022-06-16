@@ -6,10 +6,10 @@ module.exports.createUser = (req, res, next) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
+    .then((user) => res.status(201).send(user))
     .catch(() => {
       throw new BadRequestError('Переданы некорректные данные при создании пользователя');
     })
-    .then((user) => res.status(201).send(user))
     .catch((err) => next(err));
 };
 
@@ -21,10 +21,10 @@ module.exports.getUsers = (req, res, next) => {
 
 module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
+    .then((user) => res.status(200).send(user))
     .catch(() => {
       throw new NotFoundError('Запрашиваемый пользователь не найден');
     })
-    .then((user) => res.status(200).send(user))
     .catch((err) => next(err));
 };
 
@@ -39,13 +39,13 @@ module.exports.updateUser = (req, res, next) => {
       runValidators: true, // данные будут валидированы перед изменением
     },
   )
+    .then((updatedUser) => res.status(200).send(updatedUser))
     .catch((err) => {
       if (err.name === 'CastError') {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
       throw new BadRequestError('Переданы некорректные данные при обновлении профиля');
     })
-    .then((updatedUser) => res.status(200).send(updatedUser))
     .catch((err) => next(err));
 };
 
@@ -60,12 +60,12 @@ module.exports.updateAvatar = (req, res, next) => {
       runValidators: true, // данные будут валидированы перед изменением
     },
   )
+    .then((updatedUser) => res.status(200).send(updatedUser))
     .catch((err) => {
       if (err.name === 'CastError') {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
       throw new BadRequestError('Переданы некорректные данные при обновлении аватара');
     })
-    .then((updatedUser) => res.status(200).send(updatedUser))
     .catch((err) => next(err));
 };
