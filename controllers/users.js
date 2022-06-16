@@ -23,7 +23,7 @@ module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => res.status(200).send(user))
     .catch(() => {
-      throw new NotFoundError('Запрашиваемый пользователь не найден');
+      throw new BadRequestError('Запрашиваемый пользователь не найден');
     })
     .catch((err) => next(err));
 };

@@ -37,6 +37,10 @@ app.use((err, req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  res.status(404).send({message: 'Not Found'})
+})
+
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
   // eslint-disable-next-line no-console
