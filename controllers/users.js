@@ -21,9 +21,13 @@ module.exports.getUsers = (req, res, next) => {
 
 module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
-    .then((user) => res.status(200).send(user))
-    .catch(() => {
-      throw new BadRequestError('Запрашиваемый пользователь не найден');
+    // eslint-disable-next-line no-console
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Запрашиваемый пользователь не найден');
+      } else {
+        return res.status(200).send(user)
+      }
     })
     .catch((err) => next(err));
 };

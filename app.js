@@ -34,12 +34,11 @@ app.use((err, req, res, next) => {
     // eslint-disable-next-line no-param-reassign
     res.status(err.statusCode = 500).send({ err, message: 'Внутренняя ошибка сервера' });
   }
-  next();
 });
 
 app.use((req, res, next) => {
-  res.status(404).send({message: 'Not Found'})
-})
+  res.status(404).send({ message: 'Not Found' });
+});
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
