@@ -24,9 +24,17 @@ module.exports.getUserById = (req, res, next) => {
     // eslint-disable-next-line no-console
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Запрашиваемый пользователь не найден');
+        throw new NotFoundError('Запрашиваемый пользователь не существует');
       } else {
-        return res.status(200).send(user)
+        return res.status(200).send(user);
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        throw new BadRequestError('Запрашиваемый пользователь не найден (некорректный id)');
+      }
+      if (err.name === 'NotFoundError') {
+        next(err);
       }
     })
     .catch((err) => next(err));
