@@ -23,9 +23,20 @@ module.exports.createCard = (req, res, next) => {
 
 module.exports.deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params.cardId)
-    .then(() => res.status(200).send({ message: 'Карточка успешно удалена' }))
-    .catch(() => {
-      throw new NotFoundError(' Карточка с указанным _id не найдена.');
+    .then((card) => {
+      if (!card) {
+        throw new NotFoundError('Запрашиваемая карточка не существует');
+      } else {
+        return res.status(200).send({ message: 'Карточка успешно удалена' });
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        throw new BadRequestError('Запрашиваемая карточка не найдена (некорректный id)');
+      }
+      if (err.name === 'NotFoundError') {
+        next(err);
+      }
     })
     .catch((err) => next(err));
 };
