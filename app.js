@@ -29,12 +29,9 @@ app.use('/', routerCards);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  if (err.name === 'NotFoundError' || err.name === 'BadRequestError') {
-    res.status(err.statusCode).send({ err, message: err.message });
-  } else {
-    // eslint-disable-next-line no-param-reassign
-    res.status(err.statusCode = 500).send({ err, message: 'Внутренняя ошибка сервера' });
-  }
+  const statusCode = err.statusCode || 500;
+  const message = statusCode === 500 ? 'На сервере произошла ошибка' : err.message;
+  res.status(statusCode).send({ message });
 });
 
 // eslint-disable-next-line no-unused-vars

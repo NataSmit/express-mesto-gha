@@ -15,10 +15,13 @@ module.exports.createCard = (req, res, next) => {
 
   Card.create({ name, link, owner: id })
     .then((card) => res.status(201).send(card))
-    .catch(() => {
-      throw new BadRequestError('Переданы некорректные данные при создании карточки');
-    })
-    .catch((err) => next(err));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные при создании карточки'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.deleteCard = (req, res, next) => {
@@ -32,9 +35,10 @@ module.exports.deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Запрашиваемая карточка не найдена (некорректный id)');
-      }
-      if (err.name === 'NotFoundError') {
+        next(new BadRequestError('Запрашиваемая карточка не найдена (некорректный id)'));
+      } else if (err.name === 'NotFoundError') {
+        next(err);
+      } else {
         next(err);
       }
     })
@@ -56,13 +60,13 @@ module.exports.setLike = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Запрашиваемая карточка не найдена (некорректный id)');
-      }
-      if (err.name === 'NotFoundError') {
+        next(new BadRequestError('Запрашиваемая карточка не найдена (некорректный id)'));
+      } else if (err.name === 'NotFoundError') {
+        next(err);
+      } else {
         next(err);
       }
-    })
-    .catch((err) => next(err));
+    });
 };
 
 module.exports.removeLike = (req, res, next) => {
@@ -80,11 +84,11 @@ module.exports.removeLike = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Запрашиваемая карточка не найдена (некорректный id)');
-      }
-      if (err.name === 'NotFoundError') {
+        next(new BadRequestError('Запрашиваемая карточка не найдена (некорректный id)'));
+      } else if (err.name === 'NotFoundError') {
+        next(err);
+      } else {
         next(err);
       }
-    })
-    .catch((err) => next(err));
+    });
 };
