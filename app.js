@@ -23,7 +23,7 @@ app.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().allow('').min(2).max(30),
     about: Joi.string().allow('').min(2).max(30),
-    avatar: Joi.string().allow(''),
+    avatar: Joi.string().allow('').pattern(/https?:\/\/w?w?w?.?\w+\W+(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(ru)?/),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
   }),
@@ -40,8 +40,14 @@ app.use(errors());
 app.use(auth);
 
 app.use('/', routerUsers);
-app.use('/', routerCards);
+app.use('/', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).required(),
+    link: Joi.string().required().pattern(/https?:\/\/w?w?w?.?\w+\W+(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(ru)?/),
+  }),
+}), routerCards);
 
+app.use(errors());
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   // eslint-disable-next-line no-console

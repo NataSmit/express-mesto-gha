@@ -1,6 +1,7 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
+const Forbidden = require('../errors/Forbidden');
 
 module.exports.getCards = (req, res, next) => {
   // eslint-disable-next-line no-console
@@ -29,8 +30,12 @@ module.exports.createCard = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
+      // eslint-disable-next-line no-console
+      console.log(card.owner);
       if (!card) {
         throw new NotFoundError('Запрашиваемая карточка не существует');
+      } else if (card.owner !== req.user._id) {
+        throw new Forbidden('Нет прав для удаления карточки');
       } else {
         return res.status(200).send({ message: 'Карточка успешно удалена' });
       }
