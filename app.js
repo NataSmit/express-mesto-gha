@@ -1,34 +1,51 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { celebrate, Joi, errors } = require('celebrate');
 const bodyParser = require('body-parser');
-
-const router = require('./routes/users');
+const cookieParser = require('cookie-parser');
+const routerUsers = require('./routes/users');
 const routerCards = require('./routes/cards');
+const { login, createUser } = require('./controllers/users');
+const auth = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
 
 });
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '62a7728ba6402e279fe91c81', // вставьте сюда _id созданного в предыдущем пункте пользователя
-  };
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().allow('').min(2).max(30),
+    about: Joi.string().allow('').min(2).max(30),
+    avatar: Joi.string().allow(''),
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
+}), createUser);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
+}), login);
 
-  next();
-});
+app.use(errors());
 
-app.use('/', router);
+app.use(auth);
 
+app.use('/', routerUsers);
 app.use('/', routerCards);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
+  // eslint-disable-next-line no-console
+  console.log(err);
   const statusCode = err.statusCode || 500;
   const message = statusCode === 500 ? 'На сервере произошла ошибка' : err.message;
   res.status(statusCode).send({ message });
