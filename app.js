@@ -1,12 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { celebrate, Joi, errors } = require('celebrate');
+const { errors } = require('celebrate');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const routerUsers = require('./routes/users');
 const routerCards = require('./routes/cards');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const {userCreationValidation, loginValidation} = require('./middlewares/joiValidation');
 
 const { PORT = 3000 } = process.env;
 
@@ -16,36 +17,15 @@ app.use(cookieParser());
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
-
 });
 
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().allow('').min(2).max(30),
-    about: Joi.string().allow('').min(2).max(30),
-    avatar: Joi.string().allow('').pattern(/https?:\/\/w?w?w?.?\w+\W+(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(ru)?/),
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-  }),
-}), createUser);
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-  }),
-}), login);
-
-app.use(errors());
+app.post('/signup', userCreationValidation, createUser);
+app.post('/signin', loginValidation, login);
 
 app.use(auth);
 
 app.use('/', routerUsers);
-app.use('/', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).required(),
-    link: Joi.string().required().pattern(/https?:\/\/w?w?w?.?\w+\W+(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(ru)?/),
-  }),
-}), routerCards);
+app.use('/', routerCards);
 
 app.use(errors());
 // eslint-disable-next-line no-unused-vars

@@ -34,7 +34,10 @@ module.exports.deleteCard = (req, res, next) => {
       console.log(card.owner);
       if (!card) {
         throw new NotFoundError('Запрашиваемая карточка не существует');
-      } else if (card.owner !== req.user._id) {
+      }
+      if (card.owner !== req.user._id) {
+        // eslint-disable-next-line no-console
+        console.log('req.user._id', req.user._id);
         throw new Forbidden('Нет прав для удаления карточки');
       } else {
         return res.status(200).send({ message: 'Карточка успешно удалена' });

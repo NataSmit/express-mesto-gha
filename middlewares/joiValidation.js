@@ -1,0 +1,38 @@
+const { celebrate, Joi, errors } = require('celebrate');
+
+module.exports.userCreationValidation = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().allow('').min(2).max(30),
+    about: Joi.string().allow('').min(2).max(30),
+    avatar: Joi.string().allow('').pattern(/https?:\/\/w?w?w?.?\w+\W+(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(ru)?/),
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
+});
+
+module.exports.loginValidation = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
+});
+
+module.exports.cardCreationValidation = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).required(),
+    link: Joi.string().required().pattern(/https?:\/\/w?w?w?.?\w+\W+(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(ru)?/),
+  }),
+});
+
+module.exports.updateUserInfoValidation = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+  }),
+});
+
+module.exports.updateAvatarValidation = celebrate({
+  body: Joi.object().keys({
+    avatar: Joi.string().pattern(/https?:\/\/w?w?w?.?\w+\W+(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(ru)?/),
+  }),
+});
