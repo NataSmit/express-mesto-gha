@@ -37,8 +37,14 @@ module.exports.updateAvatarValidation = celebrate({
   }),
 });
 
-module.exports.idValidation = celebrate({
+module.exports.userIdValidation = celebrate({
   params: Joi.object({
-    id: Joi.string().alphanum().min(12).max(12),
+    userId: Joi.string().alphanum().min(24).max(24),
+  }),
+});
+
+module.exports.cardIdValidation = celebrate({
+  params: Joi.object({
+    cardId: Joi.string().alphanum().min(24).max(24),
   }),
 });
