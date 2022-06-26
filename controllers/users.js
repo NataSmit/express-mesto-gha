@@ -40,7 +40,6 @@ module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  // eslint-disable-next-line no-console
 
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
@@ -49,15 +48,11 @@ module.exports.createUser = (req, res, next) => {
 
     .then(() => res.status(201).send({ name, about, avatar }))
     .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.log(err);
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
       } else if (err.code === 11000) {
         next(new ConflictError('Указанный email уже зарегистрирован'));
       } else {
-        // eslint-disable-next-line no-console
-        console.log(err);
         next(err);
       }
     });
