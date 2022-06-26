@@ -1,7 +1,7 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
-const Forbidden = require('../errors/Forbidden');
+const ForbiddenError = require('../errors/ForbiddenError');
 
 module.exports.getCards = (req, res, next) => {
   // eslint-disable-next-line no-console
@@ -28,31 +28,27 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findById(req.params.cardId)
     .then((card) => {
-      // eslint-disable-next-line no-console
-      console.log(card.owner);
       if (!card) {
         throw new NotFoundError('Запрашиваемая карточка не существует');
       }
-      if (card.owner !== req.user._id) {
-        // eslint-disable-next-line no-console
-        console.log('req.user._id', req.user._id);
-        throw new Forbidden('Нет прав для удаления карточки');
-      } else {
-        return res.status(200).send({ message: 'Карточка успешно удалена' });
+      if (req.user._id !== card.owner.toString()) {
+        throw new ForbiddenError('Нет прав для удаления карточки');
       }
+      Card.deleteOne(card)
+        .then(() => {
+          res.status(200).send({ message: 'Карточка успешно удалена' });
+        })
+        .catch((err) => next(err));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Запрашиваемая карточка не найдена (некорректный id)'));
-      } else if (err.name === 'NotFoundError') {
-        next(err);
       } else {
         next(err);
       }
-    })
-    .catch((err) => next(err));
+    });
 };
 
 module.exports.setLike = (req, res, next) => {

@@ -7,7 +7,7 @@ const routerUsers = require('./routes/users');
 const routerCards = require('./routes/cards');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
-const {userCreationValidation, loginValidation} = require('./middlewares/joiValidation');
+const { userCreationValidation, loginValidation } = require('./middlewares/joiValidation');
 
 const { PORT = 3000 } = process.env;
 

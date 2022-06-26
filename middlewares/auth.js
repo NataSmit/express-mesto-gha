@@ -5,23 +5,11 @@ const SECRET_KEY = 'some-secret-key';
 
 // eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
-  const { authorization } = req.headers;
-
-  // eslint-disable-next-line no-console
-  console.log('authorization', authorization);
-  // eslint-disable-next-line no-console
-  console.log('req.cookies', req.cookies);
-
-  // eslint-disable-next-line no-console
-  console.log('req.headers', req.headers);
-
   if (!req.cookies) {
     return new Unauthorized('Пользователь не авторизован');
   }
 
   const token = req.cookies.jwt;
-  // eslint-disable-next-line no-console
-  console.log('token auth', token);
   let payload;
 
   try {
@@ -31,10 +19,6 @@ module.exports = (req, res, next) => {
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса
-  // eslint-disable-next-line no-console
-  console.log('req.user', req.user);
-  // eslint-disable-next-line no-console
-  console.log('payload', payload);
 
   next(); // пропускаем запрос дальше
 };

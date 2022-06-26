@@ -1,4 +1,4 @@
-const { celebrate, Joi, errors } = require('celebrate');
+const { celebrate, Joi } = require('celebrate');
 
 module.exports.userCreationValidation = celebrate({
   body: Joi.object().keys({
@@ -34,5 +34,11 @@ module.exports.updateUserInfoValidation = celebrate({
 module.exports.updateAvatarValidation = celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().pattern(/https?:\/\/w?w?w?.?\w+\W+(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(ru)?/),
+  }),
+});
+
+module.exports.idValidation = celebrate({
+  params: Joi.object({
+    id: Joi.string().alphanum().min(12).max(12),
   }),
 });
