@@ -8,6 +8,7 @@ const routerCards = require('./routes/cards');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const { userCreationValidation, loginValidation } = require('./middlewares/joiValidation');
+const NotFoundError = require('./errors/NotFoundError');
 
 const { PORT = 3000 } = process.env;
 
@@ -24,20 +25,20 @@ app.post('/signin', loginValidation, login);
 
 app.use(auth);
 
-app.use('/', routerUsers);
-app.use('/', routerCards);
+app.use('/users', routerUsers);
+app.use('/cards', routerCards);
 
 app.use(errors());
+
+app.use((req, res, next) => {
+  next(new NotFoundError('Путь не найден'));
+});
+
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = statusCode === 500 ? 'На сервере произошла ошибка' : err.message;
   res.status(statusCode).send({ message });
-});
-
-// eslint-disable-next-line no-unused-vars
-app.use((req, res, next) => {
-  res.status(404).send({ message: 'Not Found' });
 });
 
 app.listen(PORT, () => {
