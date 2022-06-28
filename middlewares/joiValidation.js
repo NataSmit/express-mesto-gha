@@ -1,5 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
-const { linkRegexValidator } = require('../regex/linkValidation')
+const { linkRegexValidator } = require('../regex/linkValidation');
 
 module.exports.userCreationValidation = celebrate({
   body: Joi.object().keys({
