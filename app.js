@@ -21,17 +21,16 @@ const { PORT = 3001 } = process.env;
 
 const app = express();
 app.use('*', cors(options));
-//app.use((req, res, next) => {
+// app.use((req, res, next) => {
 //  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
 //  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 //  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
 //  res.header('Access-Control-Allow-Credentials', 'true');
 //
 //  next();
-//});
+// });
 app.use(bodyParser.json());
 app.use(cookieParser());
-
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
