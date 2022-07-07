@@ -34,7 +34,7 @@ module.exports.updateUserInfoValidation = celebrate({
 
 module.exports.updateAvatarValidation = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().pattern(/https?:\/\/w?w?w?.?\w+\W+(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(.\w+\W+)?(ru)?/),
+    avatar: Joi.string().pattern(linkRegexValidator),
   }),
 });
 

@@ -3,18 +3,35 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const routerUsers = require('./routes/users');
 const routerCards = require('./routes/cards');
-const { login, createUser } = require('./controllers/users');
+const { login, createUser, logout } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const { userCreationValidation, loginValidation } = require('./middlewares/joiValidation');
 const NotFoundError = require('./errors/NotFoundError');
 
-const { PORT = 3000 } = process.env;
+const options = {
+  origin: [
+    'http://localhost:3000',
+  ],
+  credentials: true, // эта опция позволяет устанавливать куки
+};
+const { PORT = 3001 } = process.env;
 
 const app = express();
+app.use('*', cors(options));
+//app.use((req, res, next) => {
+//  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+//  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+//  res.header('Access-Control-Allow-Credentials', 'true');
+//
+//  next();
+//});
 app.use(bodyParser.json());
 app.use(cookieParser());
+
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
@@ -27,6 +44,7 @@ app.use(auth);
 
 app.use('/users', routerUsers);
 app.use('/cards', routerCards);
+app.get('/logout', logout);
 
 app.use(errors());
 

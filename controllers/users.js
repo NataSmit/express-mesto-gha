@@ -36,6 +36,12 @@ module.exports.login = (req, res, next) => {
     .catch((err) => next(err));
 };
 
+module.exports.logout = (req, res) => {
+  res
+    .clearCookie('jwt')
+    .send({ message: 'куки удалены' });
+};
+
 module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,

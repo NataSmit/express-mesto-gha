@@ -10,6 +10,8 @@ module.exports = (req, res, next) => {
   }
 
   const token = req.cookies.jwt;
+  // eslint-disable-next-line no-console
+  console.log(token);
   let payload;
 
   try {
@@ -19,6 +21,7 @@ module.exports = (req, res, next) => {
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса
-
+  // eslint-disable-next-line no-console
+  console.log(payload);
   next();
 };
