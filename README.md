@@ -1,26 +1,12 @@
-[![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
-# Проект Mesto фронтенд + бэкенд
+# Mesto (backend)
+## Проект реализован во время обучения на курсе "Web-разработчик" Я.Практикум
+## Стек
 
-
-
-## Настройка бейджей статуса тестов
-Перед началом работы над проектом рекомендуется исправить бейджи, отражающие статус прохождения тестов.
-Для этого замените разметку бейджей на следующий фрагмент, подставив вместо `${имя_пользователя}` и `${имя_репозитория}` соответствующие значения.
-
-```
-[![Tests for sprint 13](https://github.com/${NataSmit}/${express-mesto-gha}/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/${NataSmit}/${express-mesto-gha}/actions/workflows/tests-13-sprint.yml) 
-
-[![Tests for sprint 14](https://github.com/${NataSmit}/${express-mesto-gha}/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/${NataSmit}/${express-mesto-gha}/actions/workflows/tests-14-sprint.yml)
-```
-
-
-## Директории
-
-`/routes` — папка с файлами роутера  
-`/controllers` — папка с файлами контроллеров пользователя и карточки   
-`/models` — папка с файлами описания схем пользователя и карточки  
-  
-Остальные директории вспомогательные, создаются при необходимости разработчиком
+<ul style="list-style-type:none; display: flex; flex-direction:column;">
+  <li>NodeJs <img src='https://github.com/github/explore/blob/main/topics/nodejs/nodejs.png' style='width:40px;height:40px;'/></li>
+  <li>Express <img src='https://github.com/github/explore/blob/main/topics/express/express.png' style='width:40px;height:40px;'/></li>
+  <li>Mongoose <img src='https://github.com/github/explore/blob/main/topics/mongoose/mongoose.png' style='width:40px;height:40px;'/></li>
+</ul>
 
 ## Запуск проекта
 
